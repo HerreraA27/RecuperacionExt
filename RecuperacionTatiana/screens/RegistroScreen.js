@@ -44,14 +44,7 @@ export default function RegistroScreen({ navigation }) {
         value={observacion}
         onChangeText={setObservacion}
       />
-      <Picker
-        selectedValue={estado}
-        style={styles.picker}
-        onValueChange={(itemValue) => setEstado(itemValue)}
-      >
-        <Picker.Item label="Pendiente" value="Pendiente" />
-        <Picker.Item label="Finalizada" value="Finalizada" />
-      </Picker>
+
       <Button title="Registrar" onPress={handleRegistrar} />
       <Button
         title="Ir a Gestión de Observaciones"
