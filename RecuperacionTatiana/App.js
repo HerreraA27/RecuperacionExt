@@ -1,25 +1,25 @@
-/*Importación de las dependencias para crear la navegación */
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+// App.js
 
-/* Importación de las pantallas */
+import React, { useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import RegistroScreen from './screens/RegistroScreen';
 import GestionScreen from './screens/GestionScreen';
 
+const Stack = createStackNavigator();
 
 export default function App() {
+  const [observaciones, setObservaciones] = useState([]);
 
-  const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName='RegistroScreen'
-
-        screenOptions={{
-          headerShown: false
-        }}>
-        <Stack.Screen name="RegistroScreen" component={RegistroScreen} />
-        <Stack.Screen name="GestionScreen" component={GestionScreen} />
+      <Stack.Navigator initialRouteName="Gestion">
+        <Stack.Screen name="Registro">
+          {(props) => <RegistroScreen {...props} setObservaciones={setObservaciones} />}
+        </Stack.Screen>
+        <Stack.Screen name="Gestion">
+          {(props) => <GestionScreen {...props} observaciones={observaciones} setObservaciones={setObservaciones} />}
+        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );

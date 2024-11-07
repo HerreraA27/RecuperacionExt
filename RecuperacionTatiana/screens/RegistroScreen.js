@@ -1,81 +1,78 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, Picker } from 'react-native';
+// RegistroScreen.js
 
-export default function RegistroScreen({ navigation }) {
+import React, { useState } from 'react';
+import { View, TextInput, Text, Button, Picker, StyleSheet } from 'react-native';
+
+const RegistroScreen = ({ navigation, setObservaciones }) => {
   const [nombre, setNombre] = useState('');
   const [grado, setGrado] = useState('');
   const [observacion, setObservacion] = useState('');
   const [estado, setEstado] = useState('Pendiente');
 
-  const [observaciones, setObservaciones] = useState([]);
-
-  const handleRegistrar = () => {
+  const handleSave = () => {
     if (nombre && grado && observacion) {
       const nuevaObservacion = { nombre, grado, observacion, estado };
-      setObservaciones([...observaciones, nuevaObservacion]);
-      setNombre('');
-      setGrado('');
-      setObservacion('');
-      setEstado('Pendiente');
-      alert('Observación registrada con éxito');
+      setObservaciones((prevObservaciones) => [...prevObservaciones, nuevaObservacion]);
+      navigation.goBack(); // Volver a la pantalla de gestión
     } else {
-      alert('Por favor, completa todos los campos');
+      alert('Por favor, complete todos los campos');
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Registrar Observación</Text>
+      <Text>Registro de Observación</Text>
+      
+      <Text>Nombre</Text>
       <TextInput
         style={styles.input}
-        placeholder="Nombre del Estudiante"
         value={nombre}
         onChangeText={setNombre}
       />
+
+      <Text>Grado</Text>
       <TextInput
         style={styles.input}
-        placeholder="Grado"
         value={grado}
         onChangeText={setGrado}
       />
+
+      <Text>Observación</Text>
       <TextInput
         style={styles.input}
-        placeholder="Observación"
         value={observacion}
         onChangeText={setObservacion}
+        multiline
       />
 
-      <Button title="Registrar" onPress={handleRegistrar} />
-      <Button
-        title="Ir a Gestión de Observaciones"
-        onPress={() => navigation.navigate('Gestión', { observaciones })}
-      />
+      <Text>Estado</Text>
+      <Picker
+        selectedValue={estado}
+        style={styles.picker}
+        onValueChange={(itemValue) => setEstado(itemValue)}
+      >
+        <Picker.Item label="Pendiente" value="Pendiente" />
+        <Picker.Item label="Finalizada" value="Finalizada" />
+      </Picker>
+
+      <Button title="Guardar Observación" onPress={handleSave} />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
     padding: 20,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
   input: {
-    height: 40,
-    borderColor: 'gray',
     borderWidth: 1,
-    marginBottom: 10,
-    paddingLeft: 10,
+    padding: 10,
+    marginVertical: 10,
   },
   picker: {
     height: 50,
     width: '100%',
-    marginBottom: 10,
   },
 });
+
+export default RegistroScreen;

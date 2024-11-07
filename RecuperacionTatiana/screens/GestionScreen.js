@@ -1,44 +1,52 @@
-import React, { useState } from 'react';
-import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
-import ObservationItem from '../components/ObservationItem';
+// GestionScreen.js
 
-export default function GestionScreen({ route, navigation }) {
-  const { observaciones } = route.params || { observaciones: [] }; // Verifica que lleguen correctamente
+import React from 'react';
+import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 
-  const [updatedObservations, setUpdatedObservations] = useState(observaciones);
+const GestionScreen = ({ observaciones, setObservaciones, navigation }) => {
 
-  const handleUpdateEstado = (index, newEstado) => {
-    const updated = [...updatedObservations];
-    updated[index].estado = newEstado;
-    setUpdatedObservations(updated);
+  const handleUpdateEstado = (index) => {
+    const updatedObservaciones = [...observaciones];
+    updatedObservaciones[index].estado = updatedObservaciones[index].estado === 'Pendiente' ? 'Finalizada' : 'Pendiente';
+    setObservaciones(updatedObservaciones);
   };
+
+  const renderItem = ({ item, index }) => (
+    <View style={styles.observacionItem}>
+      <Text>{item.nombre}</Text>
+      <Text>{item.grado}</Text>
+      <Text>{item.observacion}</Text>
+      <Text>Estado: {item.estado}</Text>
+      <Button title="Actualizar Estado" onPress={() => handleUpdateEstado(index)} />
+    </View>
+  );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Gestión de Observaciones</Text>
+      <Text>Gestión de Observaciones</Text>
+      
       <FlatList
-        data={updatedObservations}
+        data={observaciones}
+        renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index }) => (
-          <ObservationItem
-            item={item}
-            onUpdateEstado={(newEstado) => handleUpdateEstado(index, newEstado)}
-          />
-        )}
       />
+      
+      <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
+        <Button title="Agregar Observación" />
+      </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 20,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
+  observacionItem: {
+    borderWidth: 1,
+    padding: 15,
+    marginVertical: 10,
   },
 });
+
+export default GestionScreen;
